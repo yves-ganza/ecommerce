@@ -24,3 +24,47 @@ Array.prototype.forEach.call(
 		})
 	})
 )
+
+const createProductForm = document.getElementById('create-product-form');
+
+if(createProductForm){
+	createProductForm.addEventListener('submit', e => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+
+		const obj = {};
+		for(let [key, value] of formData){
+			obj[key] = value;
+		}
+
+		const productData = {
+			name: obj.name,
+			price: Number(obj.price),
+			dimensions: {
+				x: Number(obj.x),
+				y: Number(obj.y),
+				z: Number(obj.z)
+			},
+			stock: Number(obj.stock)
+		};
+
+
+			fetch('/products', { 
+				method: 'POST', 
+				body: JSON.stringify(productData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(res => {
+				if(res.ok){
+					alert('Product added successfully');
+				}
+			})
+			.catch(e => {
+				console.log(e);
+			})
+		console.log(productData);
+	})
+}

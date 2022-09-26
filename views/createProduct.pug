@@ -1,0 +1,26 @@
+extend header.pug
+
+block content
+	form(id="create-product-form")
+		div
+			label(for="name") Product name: 
+			input(type="text", name="name", id="name")
+		div
+			label(for="price") Price($):  
+			input(type="number", name="price", id="price")
+		div
+			h4 Dimensions
+			div
+				label(for="x") x:
+				input(type="number" name="x" id="x")
+			div
+				label(for="y") y:
+				input(type="number" name="y" id="y")
+			div
+				label(for="z") z:
+				input(type="number" name="z" id="z")
+		div
+			label(for="stock") Initial stock:
+			input(type="number" name="stock" id="stock")
+		div
+			button(type="submit") Create

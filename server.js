@@ -101,6 +101,10 @@ app.post('/reviews', (req, res) => {
 	res.status(200).json(reviews);
 })
 
+app.get('/create', (req, res) => {
+	res.status(200).render('createProduct');
+})
+
 app.post('/products', (req, res) => {
 	const {name, price, dimensions, stock} = req.body;
 
@@ -109,12 +113,10 @@ app.post('/products', (req, res) => {
 		return
 	}
 	
-	if(data){
-		const newProduct = {name, price, dimensions, stock, id: crypto.randomUUID()};
-		products.push(newProduct);
-		res.status(200).json(newProduct);
-		return;
-	}
+	const newProduct = {name, price, dimensions, stock, id: crypto.randomUUID()};
+	products.push(newProduct);
+	res.status(200).json(newProduct);
+	return;
 	
 	res.status(400).json({message: 'Bad request'});
 })
