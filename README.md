@@ -5,4 +5,4 @@
 - Clone the repo
 - Install node modules: npm install
 - start server: npm start
-- Opel http://localhost:3000 in the browser
+- Go to http://localhost:3000 in the browser
