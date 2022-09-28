@@ -1,3 +1,19 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.header {
+	padding: .25rem;
+	margin-bottom: .5em;
+	background-color: #eff0f3;
+	color: #0d0d0d;
+}
+
+.main {
+	padding-left: .5rem;
+}
+
 #create-product-form {
 	display: flex;
 	flex-direction: column;

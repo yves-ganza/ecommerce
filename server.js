@@ -13,7 +13,7 @@ app.set('view engine', 'pug');
 app.use(express.json());
 
 app.get('/', (req, res) => {
-	res.render('index', {title: "ecommerce", message: "Welcome to our eCommerce store!"});
+	res.redirect('/products');
 })
 
 app.get('/products', (req, res) => {
@@ -85,7 +85,7 @@ app.post('/products', (req, res) => {
 		return
 	}
 
-	const newProduct = {name, price, dimensions, stock, id: crypto.randomUUID()};
+	const newProduct = {name, price, dimensions, stock};
 	
 	Product.create(newProduct)
 	.then(p => {
@@ -100,7 +100,6 @@ app.post('/products', (req, res) => {
 
 app.get('/reviews/:pid', (req, res) => {
 	const {pid} = req.params;
-	const product = products.find(p => p.id == pid);
 
 	Product.findById(pid)
 	.then(product => {
@@ -114,7 +113,7 @@ app.get('/reviews/:pid', (req, res) => {
 		.then(reviews => {
 
 			if(req.accepts('text/html')){
-				res.status(200).render('reviews', {product, reviews: reviews[pid]});
+				res.status(200).render('reviews', {product, reviews});
 				return
 			}
 		
@@ -158,9 +157,9 @@ app.post('/reviews', (req, res) => {
 	})	
 })
 
-app.get('/create', (req, res) => {
-	res.status(200).render('createProduct');
-})
+// app.get('/create', (req, res) => {
+// 	res.status(200).render('createProduct');
+// })
 
 mongoose.connect(process.env.DB_URI)
 .then(() => {

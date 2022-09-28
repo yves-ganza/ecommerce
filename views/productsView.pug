@@ -1,16 +1,21 @@
 extend header.pug
 
 block content
-	h3 All products
-	ul
-		each product in products
-			li
-				h4= product.name
-				p Price: $#{product.price}
-				p In stock: #{product.stock}
-				form(class="review-form" action="" id=product.id)
-					.input-wrapper
-						label(for="review-input") Add a review:
-						input(type="number", min=1, max=10 class="review-input")
-						button(type="submit") submit
-			hr
+	div(class="main")
+		h3 All products
+		ul
+			if products.length > 0
+				each product in products
+					li
+						a(href="/products/"+product._id)
+							h4= product.name
+						p Price: $#{product.price}
+						p In stock: #{product.stock}
+						form(class="review-form" action="" id=product.id)
+							.input-wrapper
+								label(for="review-input") Add a review:
+								input(type="number", min=1, max=10 class="review-input")
+								button(type="submit") submit
+					hr
+			else
+				p No products found!
