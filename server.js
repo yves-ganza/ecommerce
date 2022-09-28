@@ -3,8 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+
 const Product = require('./models/productModel.js');
 const Review = require('./models/reviewModel.js');
+const Order = require('./models/orderModel.js');
 
 const app = express();
 
@@ -155,6 +157,51 @@ app.post('/reviews', (req, res) => {
 			res.status(200).json({message: 'Thanks for the review!'});
 		})
 	})	
+})
+
+app.post('/orders', (req, res) => {
+	const {author, items} = req.body;
+
+	const stock_quantity = [];
+
+	// Validate quantity
+	items.forEach(async order_item => {
+		const p = await Product.findById(order_item.product_id);
+		if(!p){
+			res.status(404).json({message: 'An invalid product was found in this order'});
+			return
+		}
+
+		if(p.stock < order_item.quantity){
+			res.status(409).json({message: 'Quantity exceeds stock'});
+			return
+		}
+
+		stock_quantity.push(p.stock);
+	})
+
+
+	// Update database
+	items.forEach(async (order_item, i) => {
+
+		try {
+			await Product.findByIdAndUpdate(order_item.product_id, { stock: stock_quantity[i]-order_item.quantity});
+		}catch(e){
+			res.status(500).json({message: 'Request failed!'});
+			return
+		}
+	})
+
+	// Create order
+
+	Order.create({ author, products: items})
+	.then(order => {
+		res.status(201).json({order});
+	})
+	.catch(e => {
+		console.log(e);
+		res.status(500).json({message: 'Request failed!'});
+	})
 })
 
 // app.get('/create', (req, res) => {

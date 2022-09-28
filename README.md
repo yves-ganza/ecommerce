@@ -1,6 +1,8 @@
 # eCommerce web app
 
-## How to use the repo
+Go to http://134.117.133.90:3000
+
+## How to run locally
 
 - Clone the repo
 - Install node modules: npm install
@@ -9,23 +11,34 @@
 
 ## Resources
 
-- GET /products  fetch all products (JSON/HTML)
+- GET /products -> fetch all products (JSON/HTML)
 
-- GET /create fetch UI for creating a new product
+- POST /products -> Create a new product
+	body structure
+		{	
+			name: String, 
+			price: Number, 
+			dimensions: {x: Number, y: Number, z: Number}, 
+			stock: Number
+		}
 
-- POST /products Create a new product
-	body structure => {name: String, price: Number, dimensions: {x: Number, y: Number, z: Number}, stock: Number}
+- GET /products/:pid -> Retrieve product with product id equal to pid (serves either JSON or HTML)
 
-- GET /products/:pid fetch product with product id equal to pid (JSON/HTML)
+- GET /reviews/:pid -> Retrieve reviews for product with id equal to pid (serves either JSON or HTML)
 
-- GET /reviews/:pid fetch reviews for product with id equal to pid (JSON/HTML)
+- POST /reviews -> Add a review for a specific product
+	body structure
+		{ id: String, review: Number(1-10) }
 
-- POST /reviews Add a review for a specific product
-	body structure => {id: String, review: Number(1-10)}
+- POST /orders -> Process a new order
+	body structure
+	{ author: String, products: [{ product_id: String, quantity: Number }] }
 
 ## Response codes
 
  - 200: All good
+ - 201: Created
  - 404: Not found
  - 400: Bad request(could be missing body data)
+ - 409: Conflict
  - 500: Unexpected server error
