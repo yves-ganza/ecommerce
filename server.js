@@ -159,6 +159,43 @@ app.post('/reviews', (req, res) => {
 	})	
 })
 
+app.get('/orders', (req, res) => {
+	Order.find({})
+	.then(orders => {
+		res.status(200).json({orders});
+	})
+	.catch(err => {
+		res.status(500).json({message: 'Request failed!'})
+	})
+})
+
+app.get('/orders/:id', (req, res) => {
+	const {id} = req.params;
+
+	Product.findById(id)
+	.then(order => {
+
+		if(order){
+			if(req.accepts('text/html')){
+				res.status(200).render('singleOrderView', {order});
+				return
+			}
+		
+			if(req.accepts('application/json')){
+				res.status(200).json(order);
+				return
+			}
+		}
+		else{
+			res.status(404).json({message: 'product not found'});
+		}
+	})
+	.catch(err => {
+		console.log(err);
+		res.status(500).json({message: 'Request not completed'});
+	})	
+})
+
 app.post('/orders', (req, res) => {
 	const {author, items} = req.body;
 

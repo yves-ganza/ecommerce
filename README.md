@@ -13,7 +13,7 @@ Go to http://134.117.133.90:3000
 
 - GET /products -> fetch all products (JSON/HTML)
 
-- POST /products -> Create a new product
+- POST /products -> Create a new product  
 	body structure
 		{	
 			name: String, 
@@ -26,13 +26,16 @@ Go to http://134.117.133.90:3000
 
 - GET /reviews/:pid -> Retrieve reviews for product with id equal to pid (serves either JSON or HTML)
 
-- POST /reviews -> Add a review for a specific product
+- POST /reviews -> Add a review for a specific product  
 	body structure
 		{ id: String, review: Number(1-10) }
 
-- POST /orders -> Process a new order
+- POST /orders -> Process a new order  
 	body structure
-	{ author: String, products: [{ product_id: String, quantity: Number }] }
+	{ author: String, products: [{ product_name: String, product_id: String, quantity: Number }] }
+
+- GET /orders -> Get a list of all orders
+- GET /orders/:id -> Get a specific order
 
 ## Response codes
 

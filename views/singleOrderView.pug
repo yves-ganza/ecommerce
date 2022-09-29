@@ -1,0 +1,12 @@
+extend header.pug
+
+block content
+	div(class="main")
+		h4= order.author
+		ul
+			each product in order.products
+				li
+					a(href="/products/"+product.product_id)
+						h4= product.product_name
+					p Quantity: #{product.quantity}
+				hr
