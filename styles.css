@@ -3,10 +3,18 @@ body {
 	padding: 0;
 }
 
-.header {
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	padding: .25rem;
 	margin-bottom: .5em;
 	background-color: #eff0f3;
+	color: #0d0d0d;
+}
+
+header .header-link {
+	text-decoration: none;
 	color: #0d0d0d;
 }
 

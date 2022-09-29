@@ -13,6 +13,11 @@ block content
 						p In stock: #{product.stock}
 						a(href="/reviews/"+product._id)
 							p Reviews
+						form(class="order-form")
+							input(type="text" name="product_id" value=product._id hidden)
+							input(type="text" name="product_name" value=product.name hidden)
+							input(type="number" name="quantity" min=1 max=product.stock)
+							button(type="submit") Add to cart
 					hr
 			else
 				p No products found!

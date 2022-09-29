@@ -1,5 +1,4 @@
 const formElements = document.getElementsByClassName('review-form');
-
 Array.prototype.forEach.call(
 	formElements, 
 	el => el.addEventListener('submit', e => {
@@ -25,8 +24,26 @@ Array.prototype.forEach.call(
 	})
 )
 
-const createProductForm = document.getElementById('create-product-form');
+const orderForms = document.getElementsByClassName('order-form');
+Array.prototype.forEach.call(orderForms, form => form.addEventListener('submit', e => {
+	e.preventDefault();
+	const formData = new FormData(e.target);
 
+	const orderItem = {};
+	for(let [key, value] of formData){
+		orderItem[key] = value;
+	}
+	orderItem.quantity = Number(orderItem.quantity);
+
+	const cart = localStorage.cart || '{}';
+	const products = JSON.parse(cart);
+
+	products[orderItem.product_id] = orderItem;
+	localStorage.cart = JSON.stringify(products);
+}))
+
+
+const createProductForm = document.getElementById('create-product-form');
 if(createProductForm){
 	createProductForm.addEventListener('submit', e => {
 		e.preventDefault();
@@ -68,3 +85,25 @@ if(createProductForm){
 		console.log(productData);
 	})
 }
+
+const renderCart = () => {
+	const  cartView = document.getElementById('cart-items');
+	if(!cartView) return;
+
+	const cart = localStorage.cart
+
+	if(!cart){
+		cartView.innerHTML = 'No items in cart!'
+		return
+	}
+
+	const products = JSON.parse(cart);
+	Object.keys(products).forEach(k => {
+		const {product_name, quantity} = products[k];
+		const li = document.createElement('li');
+		li.innerText = quantity + ' ' + product_name;
+		cartView.append(li);
+	})
+}
+
+renderCart();

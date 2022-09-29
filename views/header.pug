@@ -4,7 +4,10 @@ html
 		style
 			include ../styles.css
 	body
-		h1(class="header") eCommerce
+		header
+			a(href="/" class="header-link")
+				h1 eCommerce
+			a(href="/cart") Shopping Cart
 		block content
 	script
 		include ../script.js

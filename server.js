@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+const logger = require('morgan');
+const path = require('path');
 
 const Product = require('./models/productModel.js');
 const Review = require('./models/reviewModel.js');
@@ -10,9 +12,13 @@ const Order = require('./models/orderModel.js');
 
 const app = express();
 
-app.set('views', './views');
+
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 app.use(express.json());
+app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
 	res.redirect('/products');
@@ -92,11 +98,11 @@ app.post('/products', (req, res) => {
 	Product.create(newProduct)
 	.then(p => {
 		console.log(p);
-		res.status(200).json(p);
+		res.status(201).json(p);
 	})
 	.catch(err => {
 		console.log(err);
-		res.status(500).json({message: 'Request not completed'});
+		res.status(500).json({message: 'Request failed'});
 	})	
 })
 
@@ -153,8 +159,7 @@ app.post('/reviews', (req, res) => {
 			value: review
 		})
 		.then(review => {
-			console.log(review);
-			res.status(200).json({message: 'Thanks for the review!'});
+			res.status(201).json({message: 'Thanks for the review!'});
 		})
 	})	
 })
@@ -241,9 +246,9 @@ app.post('/orders', (req, res) => {
 	})
 })
 
-// app.get('/create', (req, res) => {
-// 	res.status(200).render('createProduct');
-// })
+app.get('/cart', (req, res) => {
+	res.status(200).render('cartView');
+})
 
 mongoose.connect(process.env.DB_URI)
 .then(() => {
@@ -252,4 +257,7 @@ mongoose.connect(process.env.DB_URI)
 	app.listen(3000, () =>{
 		console.log('Server listening on port 3000...');
 	})
+})
+.catch(err => {
+	console.log(err.message);
 })
