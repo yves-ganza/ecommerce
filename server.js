@@ -177,7 +177,7 @@ app.get('/orders', (req, res) => {
 app.get('/orders/:id', (req, res) => {
 	const {id} = req.params;
 
-	Product.findById(id)
+	Order.findById(id)
 	.then(order => {
 
 		if(order){
@@ -192,7 +192,7 @@ app.get('/orders/:id', (req, res) => {
 			}
 		}
 		else{
-			res.status(404).json({message: 'product not found'});
+			res.status(404).json({message: 'Order not found'});
 		}
 	})
 	.catch(err => {
@@ -203,46 +203,53 @@ app.get('/orders/:id', (req, res) => {
 
 app.post('/orders', (req, res) => {
 	const {author, items} = req.body;
-
 	const stock_quantity = [];
 
 	// Validate quantity
-	items.forEach(async order_item => {
+	const validations = items.map(async order_item => {
 		const p = await Product.findById(order_item.product_id);
 		if(!p){
-			res.status(404).json({message: 'An invalid product was found in this order'});
-			return
+			throw new Error({status: 404, message: 'An invalid product was found in this order'});
 		}
 
 		if(p.stock < order_item.quantity){
-			res.status(409).json({message: 'Quantity exceeds stock'});
-			return
+			throw new Error({status: 409, message: 'Quantity exceeds stock'});
 		}
-
 		stock_quantity.push(p.stock);
 	})
 
+	Promise.all(validations)
+	.then(v => {
 
-	// Update database
-	items.forEach(async (order_item, i) => {
+		// Update database
+		const updates = items.map(async (order_item, i) => {
 
-		try {
-			await Product.findByIdAndUpdate(order_item.product_id, { stock: stock_quantity[i]-order_item.quantity});
-		}catch(e){
-			res.status(500).json({message: 'Request failed!'});
-			return
-		}
+			try {
+				await Product.findByIdAndUpdate(order_item.product_id, { stock: stock_quantity[i]-order_item.quantity});
+			}catch(e){
+				throw new Error({status: 500, message: 'Request failed!'});
+			}
+		})
+
+		Promise.all(updates)
+		.then(v => {
+			// Create order
+
+			Order.create({ author, products: items})
+			.then(order => {
+				res.status(201).json({order});
+				return
+			})
+			.catch(e => {
+				throw new Error({status: 500, message: 'Request failed!'});
+			})
+		})
+		.catch(err => {
+			res.status(err.status).json({message: err.message});
+		})
 	})
-
-	// Create order
-
-	Order.create({ author, products: items})
-	.then(order => {
-		res.status(201).json({order});
-	})
-	.catch(e => {
-		console.log(e);
-		res.status(500).json({message: 'Request failed!'});
+	.catch(err => {
+		res.status(err.status).json({message: err.message});
 	})
 })
 

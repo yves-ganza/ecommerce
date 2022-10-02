@@ -40,6 +40,7 @@ Array.prototype.forEach.call(orderForms, form => form.addEventListener('submit',
 
 	products[orderItem.product_id] = orderItem;
 	localStorage.cart = JSON.stringify(products);
+	alert('Item added to cart');
 }))
 
 
@@ -90,10 +91,10 @@ const renderCart = () => {
 	const  cartView = document.getElementById('cart-items');
 	if(!cartView) return;
 
-	const cart = localStorage.cart
+	const cart = localStorage.cart;
 
 	if(!cart){
-		cartView.innerHTML = 'No items in cart!'
+		cartView.innerHTML = 'No items in cart!';
 		return
 	}
 
@@ -107,3 +108,51 @@ const renderCart = () => {
 }
 
 renderCart();
+
+const placeOrderForm = document.getElementById('place-order-form');
+placeOrderForm.addEventListener('submit', e => {
+	e.preventDefault();
+
+	const cart = localStorage.cart;
+	if(!cart){
+		alert('No items in cart!');
+		return
+	}
+
+	const products = JSON.parse(cart);
+	console.log(products);
+
+	const formData = new FormData(e.target);
+
+	const obj = {};
+	for(let [key, value] of formData){
+		obj[key] = value;
+	}
+
+	const requestObj = {
+		author: obj['author-name'],
+		items: []
+	};
+
+	Object.keys(products).forEach(key => {
+		requestObj.items.push(products[key]);
+	});
+
+	fetch('/orders', {
+		method: 'POST',
+		body: JSON.stringify({...requestObj}),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	.then(res => {
+		if(res.status == 201){
+			console.log(res);
+			alert('Order placed successfully');
+			localStorage.setItem('cart', '{}');
+		}
+	})
+	.catch(err => {
+		alert(err.message);
+	})
+})
