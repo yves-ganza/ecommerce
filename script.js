@@ -1,14 +1,20 @@
-const formElements = document.getElementsByClassName('review-form');
+const reviewFormElements = document.getElementsByClassName('review-form');
+const placeOrderForm = document.getElementById('place-order-form');
+
 Array.prototype.forEach.call(
-	formElements, 
+reviewFormElements, 
 	el => el.addEventListener('submit', e => {
 		e.preventDefault();
+		const formData = new FormData(e.target);
 
-		const value = e.target.getElementsByClassName('review-input')[0].value;
-		console.log(value);
+		const reviewObj = {};
+		for(let [key, value] of formData){
+			reviewObj[key] = value;
+		}
+		
 		fetch('/reviews', { 
 			method: 'POST', 
-			body: JSON.stringify({id: e.target.id, review: value}),
+			body: JSON.stringify({id: reviewObj['product_id'], review: reviewObj.rating, reviewer: reviewObj.reviewer}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -34,6 +40,7 @@ Array.prototype.forEach.call(orderForms, form => form.addEventListener('submit',
 		orderItem[key] = value;
 	}
 	orderItem.quantity = Number(orderItem.quantity);
+	orderItem.price = Number(orderItem.price);
 
 	const cart = localStorage.cart || '{}';
 	const products = JSON.parse(cart);
@@ -87,6 +94,12 @@ if(createProductForm){
 	})
 }
 
+const clearCartButton = document.getElementById('clear-cart-btn');
+clearCartButton.addEventListener('click', e => {
+	localStorage.removeItem('cart');
+	window.location.reload();
+})
+
 const renderCart = () => {
 	const  cartView = document.getElementById('cart-items');
 	if(!cartView) return;
@@ -94,22 +107,29 @@ const renderCart = () => {
 	const cart = localStorage.cart;
 
 	if(!cart){
+		placeOrderForm.setAttribute('hidden', '');
 		cartView.innerHTML = 'No items in cart!';
 		return
 	}
 
+	let cartSubtotal = 0;
 	const products = JSON.parse(cart);
 	Object.keys(products).forEach(k => {
-		const {product_name, quantity} = products[k];
+		const {product_name, quantity, price} = products[k];
+		const subtotal = price*quantity;
+		cartSubtotal += subtotal;
+
 		const li = document.createElement('li');
-		li.innerText = quantity + ' ' + product_name;
+		li.innerText = product_name + ' ($' + price +' /unit) - Qty: ' + quantity;
 		cartView.append(li);
 	})
+	const orderTotalEl = document.getElementById('order-total');
+	orderTotalEl.innerText = cartSubtotal;
 }
 
 renderCart();
 
-const placeOrderForm = document.getElementById('place-order-form');
+
 placeOrderForm.addEventListener('submit', e => {
 	e.preventDefault();
 
@@ -149,7 +169,8 @@ placeOrderForm.addEventListener('submit', e => {
 		if(res.status == 201){
 			console.log(res);
 			alert('Order placed successfully');
-			localStorage.setItem('cart', '{}');
+			localStorage.removeItem('cart');
+			window.location.reload();
 		}
 	})
 	.catch(err => {

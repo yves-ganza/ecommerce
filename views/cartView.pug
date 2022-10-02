@@ -3,7 +3,13 @@ extend header.pug
 block content
     h4 Your order details 
     ul(id="cart-items")
+    p
+        b Order Total: $
+        span(id="order-total")
     form(id="place-order-form")
-        label(for="author-name") Enter full name: 
-        input(type="text" name="author-name" id="author-name" required)
-        button(type="submit" name="submit-button" id="submit-button") Place order
+        div 
+            label(for="author-name") Enter full name: 
+            input(type="text" name="author-name" id="author-name" required)
+        div
+            button(type="submit" name="submit-btn" id="submit-btn") Place order
+            button(name="clear-cart" id="clear-cart-btn") Clear cart

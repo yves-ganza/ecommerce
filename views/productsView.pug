@@ -16,6 +16,8 @@ block content
 						form(class="order-form")
 							input(type="text" name="product_id" value=product._id hidden)
 							input(type="text" name="product_name" value=product.name hidden)
+							input(type="number" name="price" value=product.price hidden)
+							label(for="quantity") Quantity: 
 							input(type="number" name="quantity" min=1 max=product.stock)
 							button(type="submit") Add to cart
 					hr

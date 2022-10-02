@@ -2,7 +2,9 @@ extend header.pug
 
 block content
 	div(class="main")
-		h4= order.author
+		h4 Order details
+		p Name: #{order.author}
+		p Products:
 		ul
 			each product in order.products
 				li

@@ -138,7 +138,7 @@ app.get('/reviews/:pid', (req, res) => {
 })
 
 app.post('/reviews', (req, res) => {
-	const {id, review} = req.body;
+	const {id, review, reviewer} = req.body;
 
 	if(!id || !review){
 		res.status(400).json({message: 'Bad request'});
@@ -154,7 +154,7 @@ app.post('/reviews', (req, res) => {
 		}
 
 		Review.create({
-			author: 'unknown',
+			author: reviewer || 'unknown',
 			product_id: product._id,
 			value: review
 		})
@@ -165,9 +165,13 @@ app.post('/reviews', (req, res) => {
 })
 
 app.get('/orders', (req, res) => {
+	console.log(req.hostname, req.ip);
 	Order.find({})
 	.then(orders => {
-		res.status(200).json({orders});
+		res.status(200).json(orders.map(order => {
+			order.url = '/orders/'+order._id;
+			return order;
+		}));
 	})
 	.catch(err => {
 		res.status(500).json({message: 'Request failed!'})
