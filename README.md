@@ -1,6 +1,6 @@
 # eCommerce web app
 
-Go to http://134.117.133.90:3000
+[Visit website](http://134.117.133.90:3000) to try it out
 
 ## How to run locally
 
@@ -11,31 +11,31 @@ Go to http://134.117.133.90:3000
 
 ## Resources
 
-- GET /products -> fetch all products (JSON/HTML)
+- `GET /products ` fetch all products (JSON/HTML)
 
-- POST /products -> Create a new product  
+- `POST /products` Create a new product  
 	body structure
-		{	
+		`{	
 			name: String, 
 			price: Number, 
 			dimensions: {x: Number, y: Number, z: Number}, 
 			stock: Number
-		}
+		}`
 
-- GET /products/:pid -> Retrieve product with product id equal to pid (serves either JSON or HTML)
+- `GET /products/:pid` Retrieve product with product id equal to pid (serves either JSON or HTML)
 
-- GET /reviews/:pid -> Retrieve reviews for product with id equal to pid (serves either JSON or HTML)
+- `GET /reviews/:pid` Retrieve reviews for product with id equal to pid (serves either JSON or HTML)
 
-- POST /reviews -> Add a review for a specific product  
+- `POST /reviews` Add a review for a specific product  
 	body structure
-		{ id: String, review: Number(1-10) }
+		`{ id: String, review: Number(1-10) }`
 
-- POST /orders -> Process a new order  
+- `POST /orders` Process a new order  
 	body structure
-	{ author: String, products: [{ product_name: String, product_id: String, quantity: Number }] }
+	`{ author: String, products: [{ product_name: String, product_id: String, quantity: Number }] }`
 
-- GET /orders -> Get a list of all orders
-- GET /orders/:id -> Get a specific order
+- `GET /orders` Get a list of all orders
+- `GET /orders/:id` Get a specific order (serves either JSON or HTML)
 
 ## Response codes
 
