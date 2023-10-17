@@ -1,0 +1,14 @@
+extend header.pug
+
+block content 
+    div(class="main")
+        form(action="", id="login")
+            div 
+                label(for="email") email:
+                input(type="email", name="email", required)
+            div 
+                div 
+                    label(for="password") password:
+                    input(type="password", name="password", required)
+            div 
+                button(type="submit") Log In

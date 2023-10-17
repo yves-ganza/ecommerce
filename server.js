@@ -10,6 +10,8 @@ const Product = require('./models/productModel.js');
 const Review = require('./models/reviewModel.js');
 const Order = require('./models/orderModel.js');
 
+const auth = require('./routes/auth.js');
+
 const app = express();
 
 
@@ -19,6 +21,8 @@ app.set('view engine', 'pug');
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/auth', auth);
 
 app.get('/', (req, res) => {
 	res.redirect('/products');
@@ -261,11 +265,15 @@ app.get('/cart', (req, res) => {
 	res.status(200).render('cartView');
 })
 
+app.get('/create', (req, res) => {
+	res.status(200).render('createProduct')
+})
+
 mongoose.connect(process.env.DB_URI)
 .then(() => {
 	console.log('Connected to database!');
 
-	app.listen(3000, () =>{
+	app.listen(process.env.PORT, () =>{
 		console.log('Server listening on port 3000...');
 	})
 })

@@ -1,0 +1,20 @@
+extend header.pug
+
+block content 
+    div(class="main")
+        form(action="", id="register")
+            div
+                label(for="name") full name
+                input(type="text", id="name", name="name")
+            div 
+                label(for="email") email
+                input(type="email", name="email")
+            div 
+                div 
+                    label(for="password") password
+                    input(type="password", name="password")
+                div 
+                    label(for="retype-password") retype password:
+                    input(type="password", name="retype-password")
+            div 
+                button(type="submit") Sign Up
