@@ -8,7 +8,12 @@ html
 		header
 			a(href="/" class="header-link")
 				h1 eCommerce
-			a(href="/cart") Shopping Cart
+			ul  
+				li 
+					a(href="/auth/register") Register 
+				li
+					a(href="/auth/login") Login
+				li
+					a(href="/cart") Shopping Cart
 		block content
-	script
-		include ../script.js
+	script(src="/js/main.js" defer)

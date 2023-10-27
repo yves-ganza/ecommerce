@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', auth);
 
 app.get('/', (req, res) => {
-	res.redirect('/products');
+	res.render('index');
 })
 
 app.get('/products', (req, res) => {

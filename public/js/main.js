@@ -95,10 +95,13 @@ if(createProductForm){
 }
 
 const clearCartButton = document.getElementById('clear-cart-btn');
-clearCartButton.addEventListener('click', e => {
-	localStorage.removeItem('cart');
-	window.location.reload();
-})
+if(clearCartButton){
+	clearCartButton.addEventListener('click', e => {
+		localStorage.removeItem('cart');
+		window.location.reload();
+	})
+}
+
 
 const renderCart = () => {
 	const  cartView = document.getElementById('cart-items');
@@ -129,51 +132,86 @@ const renderCart = () => {
 
 renderCart();
 
-
-placeOrderForm.addEventListener('submit', e => {
-	e.preventDefault();
-
-	const cart = localStorage.cart;
-	if(!cart){
-		alert('No items in cart!');
-		return
-	}
-
-	const products = JSON.parse(cart);
-	console.log(products);
-
-	const formData = new FormData(e.target);
-
-	const obj = {};
-	for(let [key, value] of formData){
-		obj[key] = value;
-	}
-
-	const requestObj = {
-		author: obj['author-name'],
-		items: []
-	};
-
-	Object.keys(products).forEach(key => {
-		requestObj.items.push(products[key]);
-	});
-
-	fetch('/orders', {
-		method: 'POST',
-		body: JSON.stringify({...requestObj}),
-		headers: {
-			'Content-Type': 'application/json'
+if(placeOrderForm){
+	placeOrderForm.addEventListener('submit', e => {
+		e.preventDefault();
+	
+		const cart = localStorage.cart;
+		if(!cart){
+			alert('No items in cart!');
+			return
 		}
-	})
-	.then(res => {
-		if(res.status == 201){
-			console.log(res);
-			alert('Order placed successfully');
-			localStorage.removeItem('cart');
-			window.location.reload();
+	
+		const products = JSON.parse(cart);
+		console.log(products);
+	
+		const formData = new FormData(e.target);
+	
+		const obj = {};
+		for(let [key, value] of formData){
+			obj[key] = value;
 		}
+	
+		const requestObj = {
+			author: obj['author-name'],
+			items: []
+		};
+	
+		Object.keys(products).forEach(key => {
+			requestObj.items.push(products[key]);
+		});
+	
+		fetch('/orders', {
+			method: 'POST',
+			body: JSON.stringify({...requestObj}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(res => {
+			if(res.status == 201){
+				console.log(res);
+				alert('Order placed successfully');
+				localStorage.removeItem('cart');
+				window.location.reload();
+			}
+		})
+		.catch(err => {
+			alert(err.message);
+		})
 	})
-	.catch(err => {
-		alert(err.message);
+}
+
+const registerForm = document.getElementById('register-form');
+if(registerForm){
+	registerForm.addEventListener('submit', e => {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const jsonData = {};
+	
+		formData.forEach((value, key) => {
+			jsonData[key] = value;
+		});
+	
+		fetch('/auth/register', {
+			method: 'POST',
+			body: JSON.stringify(jsonData),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(res => {
+			if(res.ok){
+				alert("Registration successfull!");
+				res.redirect('/');
+			} else {
+				return res.json();
+			}
+		})
+		.then(data => {
+			alert(data.error);
+		}).catch(err => {
+			alert("An error has occured. Please try again!");
+		})
 	})
-})
+}
