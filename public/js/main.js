@@ -193,7 +193,7 @@ if(registerForm){
 			jsonData[key] = value;
 		});
 	
-		fetch('/auth/register', {
+		fetch('/user/register', {
 			method: 'POST',
 			body: JSON.stringify(jsonData),
 			headers: {
@@ -211,7 +211,43 @@ if(registerForm){
 		.then(data => {
 			alert(data.error);
 		}).catch(err => {
+			console.log(err);
 			alert("An error has occured. Please try again!");
+		})
+	})
+}
+
+const loginForm = document.getElementById('login-form');
+if (loginForm) {
+	loginForm.addEventListener('submit', e => {
+		e.preventDefault();
+
+		const formData = new FormData(e.target);
+		const jsonData = {};
+		
+		formData.forEach((value, key) => {
+			jsonData[key] = value;
+		})
+
+		fetch(
+			'/auth/login',
+			{
+				method: 'POST',
+				body: JSON.stringify(jsonData),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		).then(res => {
+			console.log(res);
+			if(res.url == window.location.href){
+				alert("Authentication failed!");
+			}else{
+				window.location.href = res.url;
+			}
+		}).catch(err => {
+			console.log(err);
+			alert("Something went wrong!");
 		})
 	})
 }

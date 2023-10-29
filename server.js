@@ -1,9 +1,12 @@
 require('dotenv').config();
 
 const express = require('express');
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 const logger = require('morgan');
+const passport = require('passport');
+const session  = require('express-session');
+const MongoStore = require('connect-mongo');
+
 const path = require('path');
 
 const Product = require('./models/productModel.js');
@@ -11,6 +14,8 @@ const Review = require('./models/reviewModel.js');
 const Order = require('./models/orderModel.js');
 
 const auth = require('./routes/auth.js');
+const user = require('./routes/user.js');
+const index = require('./routes/index.js');
 
 const app = express();
 
@@ -22,11 +27,19 @@ app.use(express.json());
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+	secret: '3XD15n7qErZxJhurRId0Skglq5+k4BCsEFvxYrxTEdQ=',
+	resave: false,
+	saveUninitialized: false,
+	store: new MongoStore({ mongoUrl: process.env.DB_URI })
+}));
+
+app.use(passport.authenticate('session'));
+
+app.use('/', index);
+app.use('/user', user);
 app.use('/auth', auth);
 
-app.get('/', (req, res) => {
-	res.render('index');
-})
 
 app.get('/products', (req, res) => {
 	const { name, instock } = req.query;

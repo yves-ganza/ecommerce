@@ -2,10 +2,10 @@ extend header.pug
 
 block content 
     div(class="main")
-        form(action="", id="login")
+        form(action="", id="login-form", method="post")
             div 
-                label(for="email") email:
-                input(type="email", name="email", required)
+                label(for="username") username/email:
+                input(type="username", name="username", required)
             div 
                 div 
                     label(for="password") password:
