@@ -1,0 +1,10 @@
+extend authdHeader.pug 
+
+block content 
+    main 
+        h2 My Profile
+        ul 
+            li Username: #{username} 
+            li Email: #{email}
+        hr
+        button(id="logout-button") Log out
