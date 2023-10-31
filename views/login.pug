@@ -3,12 +3,15 @@ extend header.pug
 block content 
     div(class="main")
         form(action="", id="login-form", method="post")
-            div 
-                label(for="username") username/email:
-                input(type="username", name="username", required)
-            div 
+            fieldset 
+                legend Login
+                div 
+                    label(for="username") username/email:
+                    input(type="username", name="username", required)
                 div 
                     label(for="password") password:
                     input(type="password", name="password", required)
-            div 
-                button(type="submit") Log In
+                div(class="error-message") 
+                    p=message
+                div 
+                    button(type="submit") Submit

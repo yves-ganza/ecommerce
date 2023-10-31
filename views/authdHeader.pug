@@ -7,11 +7,11 @@ html
 		header
 			a(href="/" class="header-link")
 				h1 eCommerce
-			ul  
-				li= username
-				li
-					a(href="/auth/logout") Logout
-				li
-					a(href="/cart") Shopping Cart
+			nav 
+				ul  
+					li
+						a(href="/user/profile") Dashboard
+					li
+						a(href="/cart") Shopping Cart
 		block content
 	script(src="/js/main.js" defer)

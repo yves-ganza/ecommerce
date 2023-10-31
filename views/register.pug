@@ -3,18 +3,22 @@ extend header.pug
 block content 
     div(class="main")
         form(action="/auth/register" id="register-form" method="post" enctype="application/json")
-            div
-                label(for="username") username
-                input(type="text" id="username" name="username")
-            div 
-                label(for="email") email
-                input(type="email" name="email")
-            div 
+            fieldset 
+                legend Register
+                div
+                    label(for="username") username
+                    input(type="text" id="username" name="username")
                 div 
-                    label(for="password") password
-                    input(type="password" name="password")
+                    label(for="email") email
+                    input(type="email" name="email")
                 div 
-                    label(for="retype-password") retype password:
-                    input(type="password" name="retype-password")
-            div 
-                button(type="submit") Sign Up
+                    div 
+                        label(for="password") password
+                        input(type="password" name="password")
+                    div 
+                        label(for="retype-password") retype password
+                        input(type="password" name="retype-password")
+                div(class="error-message")
+                    p=message
+                div 
+                    button(type="submit") Sign Up

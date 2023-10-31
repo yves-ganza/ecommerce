@@ -13,5 +13,13 @@ router.post(
     userController.registerUser,
 )
 
+router.get('/profile', (req, res) => {
+    if(!req.user){
+        res.redirect('/auth/login');
+    }else {
+        res.render('profile', {username: req.user.username, email: req.user.email});
+    }
+})
+
 module.exports = router;
 

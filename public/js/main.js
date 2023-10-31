@@ -239,13 +239,30 @@ if (loginForm) {
 				}
 			}
 		).then(res => {
-			console.log(res);
-			if(res.url == window.location.href){
-				alert("Authentication failed!");
-			}else{
-				window.location.href = res.url;
-			}
+			// console.log(res);
+			// if(res.url == window.location.href){
+			// 	alert("Authentication failed!");
+			// }else{
+			// 	window.location.href = res.url;
+			// }
+			window.location.href = res.url;
 		}).catch(err => {
+			console.log(err);
+			alert("Something went wrong!");
+		})
+	})
+}
+
+const logoutButton = document.getElementById('logout-button');
+if(logoutButton){
+	logoutButton.addEventListener('click', e => {
+		e.preventDefault();
+
+		fetch('/auth/logout', {method: 'POST'})
+		.then(res => {
+			window.location.href = res.url;
+		})
+		.catch(err => {
 			console.log(err);
 			alert("Something went wrong!");
 		})

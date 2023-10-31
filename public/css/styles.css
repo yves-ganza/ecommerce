@@ -22,6 +22,10 @@ header .header-link {
 	padding-left: .5rem;
 }
 
+.error-message {
+	color: red;
+}
+
 #create-product-form {
 	display: flex;
 	flex-direction: column;

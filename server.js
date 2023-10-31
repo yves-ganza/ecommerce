@@ -28,7 +28,7 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-	secret: '3XD15n7qErZxJhurRId0Skglq5+k4BCsEFvxYrxTEdQ=',
+	secret: process.env.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
 	store: new MongoStore({ mongoUrl: process.env.DB_URI })
