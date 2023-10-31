@@ -1,6 +1,6 @@
 # eCommerce web app
 
-[Visit website](http://134.117.133.90:3000) to try it out
+<!-- [Visit website](http://134.117.133.90:3000) to try it out -->
 
 ## How to run locally
 
